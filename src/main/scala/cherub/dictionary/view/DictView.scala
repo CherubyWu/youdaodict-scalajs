@@ -1,9 +1,8 @@
 package cherub.dictionary.view
 
 import cherub.dictionary.{Dictionary, QueryResponse}
-import org.scalajs.dom.Element
+import org.scalajs.dom.{Element, window}
 import org.scalajs.jquery.{JQuery, jQuery => $}
-import org.scalajs.dom.window
 
 /**
   * Created by cherub on 17-4-2.

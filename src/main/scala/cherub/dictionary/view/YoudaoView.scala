@@ -1,7 +1,7 @@
 package cherub.dictionary.view
 import cherub.dictionary.{Dictionary, QueryResponse}
 import cherub.js.Implicits._
-import org.scalajs.dom.raw.{HTMLAudioElement, MouseEvent}
+import org.scalajs.dom.raw.HTMLAudioElement
 import org.scalajs.dom.{document, window}
 import org.scalajs.jquery.{JQuery, JQueryEventObject, jQuery => $}
 
@@ -41,6 +41,11 @@ object YoudaoView extends {
         addClass(htmlClass("explains-item")).
         html(text).
         appendTo(explainsList)
+    }
+
+    // 点击翻译中的单词时直接查询
+    $(cssClass("word")).click { (e: JQueryEventObject) =>
+      searchCallback($(e.currentTarget).text())
     }
 
     autoMove()
@@ -96,17 +101,29 @@ object YoudaoView extends {
   }
 
   private def renderExplains(arr: Seq[String]): Seq[String] = {
+    def limitThenRender(s: String, limitLen: Int) =
+      renderWordsIn(limitLengthWithNewLine(s, limitLen)).replaceAll("\n", "<br/>")
+
     val limitLen = 20
     for (s <- arr) yield {
       val a = s.split(" ", 2)
       if (a.length == 2 && a(0).endsWith("."))
         s"""
            <span class="${htmlClass("word-type")} ${htmlClass("word-type-" + a(0).stripSuffix("."))}">${a(0)}</span>
-           <span class="${htmlClass("explain")}">${limitLengthWithNewLine(a(1), limitLen)}</span>
+           <span class="${htmlClass("explain")}">${limitThenRender(a(1), limitLen)}</span>
           """
       else
-        limitLengthWithNewLine(a(0), limitLen)
+        limitThenRender(a(0), limitLen)
     }
+  }
+
+  private def renderWordsIn(s: String): String = {
+    val wordRe = "[\\w\\s]+".r
+    wordRe.replaceAllIn(s, { m =>
+      $("<a/>").
+        addClass(htmlClass("word")).
+        html(m.matched)(0).outerHTML
+    })
   }
 
   private def limitLength(s: String, len: Int): String = {
@@ -116,11 +133,10 @@ object YoudaoView extends {
       s
   }
 
-  private def limitLengthWithNewLine(s: String, len: Int, html: Boolean = true): String = {
-    val newLine = if (html) "<br/>" else "\n"
+  private def limitLengthWithNewLine(s: String, len: Int): String = {
     if (s.length > len) {
       val (a, b) = s.splitAt(len)
-      s"$a$newLine${limitLengthWithNewLine(b, len)}"
+      s"$a\n${limitLengthWithNewLine(b, len)}"
     } else s
   }
 
@@ -136,7 +152,7 @@ object YoudaoView extends {
       appendTo(win)
 
   private val title =
-    $("<h3>").
+    $("<span/>").
       addClass(htmlClass("title")).
       html("Dictionary").
       appendTo(titleBar)
@@ -315,16 +331,25 @@ object YoudaoView extends {
           |}
           |
           |.${titleBar.attr("class")} {
-          |  background: darkgray;
+          |  background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, darkgray), color-stop(1, gray));
+          |  background:-moz-linear-gradient(top, darkgray 5%, gray 100%);
+          |  background:-webkit-linear-gradient(top, darkgray 5%, gray 100%);
+          |  background:-o-linear-gradient(top, darkgray 5%, gray 100%);
+          |  background:-ms-linear-gradient(top, darkgray 5%, gray 100%);
+          |  background:linear-gradient(to bottom, darkgray 5%, gray 100%);
+          |  background-color: darkgray;
           |  padding: 5px 0;
           |  margin: 0;
           |  height: 25px;
           |  text-align: center;
+          |  cursor: default;
           |}
           |
           |.${title.attr("class")} {
           |  font-size: 15px;
-          |  color: ghostwhite;
+          |  font-weight: bold;
+          |  letter-spacing: 1px;
+          |  color: snow;
           |  cursor: inherit;
           |  margin: 0;
           |}
@@ -451,6 +476,14 @@ object YoudaoView extends {
               s"${cssClass("word-type-" + t)} { color: $color; }"
             }).mkString("\n")
           }
+          |
+          |${cssClass("word")} {
+          |  cursor: pointer;
+          |  color: #07A;
+          |}
+          |${cssClass("word")}:hover {
+          |  text-decoration: underline;
+          |}
           |
           |.${win.attr("class")} hr {
           |  clear: both;

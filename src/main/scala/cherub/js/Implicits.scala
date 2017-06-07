@@ -11,8 +11,6 @@ import scala.scalajs.js
 object Implicits {
   implicit class RichJQuery(jq: JQuery) {
     def moveTo(x: Double, y: Double, unit: String = "px"): JQuery = {
-
-      println(s"movezTo ($x, $y)")
       jq.css(js.Dynamic.literal(
         left = s"$x$unit",
         top  = s"$y$unit"

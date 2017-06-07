@@ -54,8 +54,6 @@ object Main extends JSApp {
   }
 
   def translate(e: MouseEvent): Unit = {
-    println(s"pageX: ${e.pageX}, pageY: ${e.pageY}")
-    println(s"clientX: ${e.clientX}, clientY: ${e.clientY}")
     if (dictView.pointInWin(e.pageX, e.pageY))
       return
     dictView.hideOldWin()
