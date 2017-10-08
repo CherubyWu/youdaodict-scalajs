@@ -34,21 +34,24 @@ object Main extends JSApp {
     $("body").keydown { (e: KeyboardEvent) =>
       e.keyCode match {
         case 27 => //ESC
-          dictView.toggle()
           if (e.altKey)
             enable = !enable
+          else
+            dictView.toggle()
         case _ => { /* Nothing */ }
       }
     }
   }
 
   def query(word: String): Unit = {
-    dictView.before_query(dict, word)
-    dictView.startLoad()
+    dictView.
+      before_query(dict, word).
+      startLoad()
     dict.query(word) { qr =>
       qr.foreach { queryRes =>
-        dictView.stopLoad()
-        dictView.showQueryInWin(dict, queryRes)
+        dictView.
+          stopLoad().
+          showQueryInWin(dict, queryRes)
       }
     }
   }
@@ -56,7 +59,7 @@ object Main extends JSApp {
   def translate(e: MouseEvent): Unit = {
     if (dictView.pointInWin(e.pageX, e.pageY))
       return
-    dictView.hideOldWin()
+    dictView.hideOldWin().stopLoad()
     Option(document.getSelection).foreach { selection =>
       if (selection.anchorNode != null && selection.anchorNode.nodeType == 3) {
         val word = selection.toString
@@ -64,8 +67,7 @@ object Main extends JSApp {
           .replace("-\n", "")
           .replace("\n", " ")
         if (!word.isEmpty) {
-          dictView.showWinAt(e.pageX, e.pageY)
-          query(word)
+          dictView.showWinAt(e.pageX, e.pageY, () => query(word))
         }
       }
     }

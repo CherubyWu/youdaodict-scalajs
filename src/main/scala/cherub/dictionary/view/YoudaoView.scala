@@ -12,10 +12,17 @@ object YoudaoView extends {
   override val htmlClassPrefix: String = "youdao"
 } with DictView {
 
-  override def showWinAt(x: Double, y: Double): YoudaoView.this.type = {
-    win
-      .fadeOut(() => win.moveTo(x, y))
-      .fadeIn()
+  override def showWinAt(x: Double, y: Double): YoudaoView.this.type =
+    showWinAt(x, y, () => ())
+
+  override def showWinAt(x: Double, y: Double, callback: () => Unit): YoudaoView.this.type = {
+    print("show at: ")
+    win.
+      fadeOut { () =>
+        win.moveTo(x, y)
+        callback()
+      }.
+      fadeIn()
     this
   }
 
@@ -58,6 +65,8 @@ object YoudaoView extends {
     queryWord.
       html(limitLength(word, 15)).
       attr("href", dict.wordURL(word))
+    phoneticUK.html("")
+    phoneticUS.html("")
     imageSearchLink.attr("href", dict.imageSearchURL(word))
     this
   }
@@ -75,8 +84,13 @@ object YoudaoView extends {
     def currentOpacity = loading.css("opacity").toDouble
     loadingBlink = window.setInterval({ () =>
       loading.css("opacity", currentOpacity + changeSpeed * flag)
-      if (currentOpacity >= 1 || currentOpacity <= 0.1)
-        flag = -flag
+      if (currentOpacity >= 1) {
+        flag = -1
+        loading.css("opacity", 1)
+      } else if (currentOpacity <= 0.1) {
+        flag = 1
+        loading.css("opacity", 0.1)
+      }
     }, 100)
     this
   }
@@ -118,7 +132,7 @@ object YoudaoView extends {
   }
 
   private def renderWordsIn(s: String): String = {
-    val wordRe = "[\\w\\s]+".r
+    val wordRe = "\\w[\\w\\s]+".r
     wordRe.replaceAllIn(s, { m =>
       $("<a/>").
         addClass(htmlClass("word")).
@@ -327,7 +341,7 @@ object YoudaoView extends {
           |  border-radius: 5px;
           |  border: 1px solid lightslategrey;
           |  box-shadow: 0 3px 4px rgba(0, 0, 0, 0.2);
-          |  zIndex; 99999;
+          |  z-index: 99999;
           |}
           |
           |.${titleBar.attr("class")} {

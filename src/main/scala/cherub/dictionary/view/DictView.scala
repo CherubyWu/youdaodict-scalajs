@@ -14,22 +14,21 @@ abstract class DictView {
 
 
   def showWinAt(x: Double, y: Double): this.type
+  def showWinAt(x: Double, y: Double, callback: () => Unit): this.type
   def startLoad(): this.type
   def stopLoad(): this.type
   def showQueryInWin(dict:Dictionary, queryResponse: QueryResponse): this.type
   def before_query(dict: Dictionary, word: String): this.type // 预先设置无需查询信息
 
   def removeOldWin(): this.type = {
-   win.fadeOut(500, {() =>
-     stopLoad()
-     win.remove()
-   })
+   win.fadeOut(500, () => win.remove())
     this
   }
   def hideOldWin(): this.type = {
-    win.fadeOut(() => stopLoad())
+    win.fadeOut()
     this
   }
+
   def toggle(): JQuery = win.fadeToggle()
   def dictWin: Element = win(0)
   def win: JQuery = getByClass("win")
