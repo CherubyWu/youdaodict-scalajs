@@ -1,35 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="674e8f25-0f30-4476-b898-d04ef9b521c6" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/.name" afterPath="$PROJECT_DIR$/.idea/.name" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/kotlinc.xml" afterPath="$PROJECT_DIR$/.idea/kotlinc.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/SBT__be_doeraene_scalajs_jquery_sjs0_6_2_12_0_9_1_jar.xml" afterPath="$PROJECT_DIR$/.idea/libraries/SBT__be_doeraene_scalajs_jquery_sjs0_6_2_12_0_9_1_jar.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/SBT__org_scala_js_scalajs_dom_sjs0_6_2_12_0_9_1_jar.xml" afterPath="$PROJECT_DIR$/.idea/libraries/SBT__org_scala_js_scalajs_dom_sjs0_6_2_12_0_9_1_jar.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/SBT__org_scala_js_scalajs_library_2_12_0_6_15_jar.xml" afterPath="$PROJECT_DIR$/.idea/libraries/SBT__org_scala_js_scalajs_library_2_12_0_6_15_jar.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/SBT__org_scala_js_scalajs_test_interface_2_12_0_6_15_jar.xml" afterPath="$PROJECT_DIR$/.idea/libraries/SBT__org_scala_js_scalajs_test_interface_2_12_0_6_15_jar.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/SBT__org_scala_lang_scala_library_2_12_1_jar.xml" afterPath="$PROJECT_DIR$/.idea/libraries/SBT__org_scala_lang_scala_library_2_12_1_jar.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules/youdaodict-build.iml" afterPath="$PROJECT_DIR$/.idea/modules/youdaodict-build.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules/youdaodict.iml" afterPath="$PROJECT_DIR$/.idea/modules/youdaodict.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/sbt.xml" afterPath="$PROJECT_DIR$/.idea/sbt.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/scala_compiler.xml" afterPath="$PROJECT_DIR$/.idea/scala_compiler.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build.sbt" afterPath="$PROJECT_DIR$/build.sbt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/project/build.properties" afterPath="$PROJECT_DIR$/project/build.properties" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/project/plugin.sbt" afterPath="$PROJECT_DIR$/project/plugin.sbt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/cherub/dictionary/Dictionary.scala" afterPath="$PROJECT_DIR$/src/main/scala/cherub/dictionary/Dictionary.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/cherub/dictionary/YoudaoDict.scala" afterPath="$PROJECT_DIR$/src/main/scala/cherub/dictionary/YoudaoDict.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/cherub/dictionary/view/DictView.scala" afterPath="$PROJECT_DIR$/src/main/scala/cherub/dictionary/view/DictView.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/cherub/dictionary/view/YoudaoView.scala" afterPath="$PROJECT_DIR$/src/main/scala/cherub/dictionary/view/YoudaoView.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/cherub/js/Implicits.scala" afterPath="$PROJECT_DIR$/src/main/scala/cherub/js/Implicits.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/cherub/js/greasemonkey/GM.scala" afterPath="$PROJECT_DIR$/src/main/scala/cherub/js/greasemonkey/GM.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/cherub/main/Main.scala" afterPath="$PROJECT_DIR$/src/main/scala/cherub/main/Main.scala" />
-    </list>
+    <list default="true" id="674e8f25-0f30-4476-b898-d04ef9b521c6" name="Default" comment="" />
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
     <ignored path="$PROJECT_DIR$/project/project/target/" />
@@ -815,12 +787,12 @@
       <workItem from="1497056659708" duration="189000" />
       <workItem from="1498652685573" duration="440000" />
       <workItem from="1501501535134" duration="34000" />
-      <workItem from="1507506476534" duration="211000" />
+      <workItem from="1507506476534" duration="546000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="108678000" />
+    <option name="totallyTimeSpent" value="109013000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="26" width="1920" height="1054" extended-state="0" />
