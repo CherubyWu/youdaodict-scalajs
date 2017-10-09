@@ -1,7 +1,7 @@
 package cherub.main
 
 import cherub.dictionary._
-import cherub.dictionary.view.{DictView, YoudaoView}
+import cherub.dictionary.view.{DictScene, Scene, Window}
 import org.scalajs.dom.raw.KeyboardEvent
 import org.scalajs.dom.{MouseEvent, document}
 import org.scalajs.jquery.{jQuery => $}
@@ -13,7 +13,10 @@ import scala.scalajs.js.JSApp
   */
 object Main extends JSApp {
   val dict: Dictionary = YoudaoDict
-  val dictView: DictView = YoudaoView
+  val win = new Window
+  val dictScene: DictScene = new DictScene
+  win.replaceScene(dictScene)
+
 
   var enable = true
 
@@ -22,7 +25,7 @@ object Main extends JSApp {
   }
 
   def initEvent(): Unit = {
-    dictView.searchCallback = { w =>
+    dictScene.searchCallback = { w =>
       query(w)
     }
 
@@ -37,29 +40,31 @@ object Main extends JSApp {
           if (e.altKey)
             enable = !enable
           else
-            dictView.toggle()
+            win.toggle()
         case _ => { /* Nothing */ }
       }
     }
   }
 
   def query(word: String): Unit = {
-    dictView.
+    dictScene.
       before_query(dict, word).
       startLoad()
     dict.query(word) { qr =>
       qr.foreach { queryRes =>
-        dictView.
+        dictScene.
           stopLoad().
           showQueryInWin(dict, queryRes)
+        win.autoMove()
       }
     }
   }
 
   def translate(e: MouseEvent): Unit = {
-    if (dictView.pointInWin(e.pageX, e.pageY))
+    if (win.pointInWin(e.pageX, e.pageY))
       return
-    dictView.hideOldWin().stopLoad()
+    win.hideOldWin()
+    dictScene.stopLoad()
     Option(document.getSelection).foreach { selection =>
       if (selection.anchorNode != null && selection.anchorNode.nodeType == 3) {
         val word = selection.toString
@@ -67,7 +72,7 @@ object Main extends JSApp {
           .replace("-\n", "")
           .replace("\n", " ")
         if (!word.isEmpty) {
-          dictView.showWinAt(e.pageX, e.pageY, () => query(word))
+          win.showWinAt(e.pageX, e.pageY, () => query(word))
         }
       }
     }

@@ -8,25 +8,11 @@ import org.scalajs.jquery.{JQuery, JQueryEventObject, jQuery => $}
 /**
   * Created by cherub on 17-5-31.
   */
-object YoudaoView extends {
-  override val htmlClassPrefix: String = "youdao"
-} with DictView {
+class DictScene extends Scene {
+  // At search button clicked, send search line value to function, default do nothing
+  var searchCallback: String => Unit = { _ => () }
 
-  override def showWinAt(x: Double, y: Double): YoudaoView.this.type =
-    showWinAt(x, y, () => ())
-
-  override def showWinAt(x: Double, y: Double, callback: () => Unit): YoudaoView.this.type = {
-    print("show at: ")
-    win.
-      fadeOut { () =>
-        win.moveTo(x, y)
-        callback()
-      }.
-      fadeIn()
-    this
-  }
-
-  override def showQueryInWin(dict: Dictionary, queryResponse: QueryResponse): this.type = {
+  def showQueryInWin(dict: Dictionary, queryResponse: QueryResponse): this.type = {
     val word = queryResponse.queryWord
 
     phoneticUK.html(
@@ -54,13 +40,10 @@ object YoudaoView extends {
     $(cssClass("word")).click { (e: JQueryEventObject) =>
       searchCallback($(e.currentTarget).text())
     }
-
-    autoMove()
-
     this
   }
 
-  override def before_query(dict: Dictionary, word: String): this.type = {
+  def before_query(dict: Dictionary, word: String): this.type = {
     searchLine.value(word)
     queryWord.
       html(limitLength(word, 15)).
@@ -73,7 +56,7 @@ object YoudaoView extends {
 
   private var loadingBlink: Int = 0
 
-  override def startLoad(): YoudaoView.this.type = {
+  override def startLoad(): DictScene.this.type = {
     stopLoad() // 停止之前未停止的加载
 
     explainsList.html("")
@@ -99,19 +82,6 @@ object YoudaoView extends {
     loading.hide()
     window.clearInterval(loadingBlink)
     this
-  }
-
-  private def autoMove() {
-    val rect = dictWin.getBoundingClientRect()
-    val rectPageLeft = win.css("left").stripSuffix("px").toDouble
-    val rectPageTop = win.css("top").stripSuffix("px").toDouble
-    val winX = if (rect.left + rect.width >= window.innerWidth)
-      rectPageLeft - (rect.left + rect.width - window.innerWidth + 20)
-    else rectPageLeft
-    val winY = if (rect.top + rect.height >= window.innerHeight)
-      rectPageTop - (rect.top + rect.height - window.innerHeight + 20)
-    else rectPageTop
-    win.moveTo(winX, winY)
   }
 
   private def renderExplains(arr: Seq[String]): Seq[String] = {
@@ -154,27 +124,9 @@ object YoudaoView extends {
     } else s
   }
 
-  override val win: JQuery =
+  override val content: JQuery =
     $("<div/>").
-      hide().
-      addClass(htmlClass("win")).
-      appendTo(document.body)
-
-  private val titleBar =
-    $("<div/>").
-      addClass(htmlClass("title-bar")).
-      appendTo(win)
-
-  private val title =
-    $("<span/>").
-      addClass(htmlClass("title")).
-      html("Dictionary").
-      appendTo(titleBar)
-
-  private val content =
-    $("<div/>").
-      addClass(htmlClass("content")).
-      appendTo(win)
+      addClass(htmlClass("scene"))
 
   private val header =
     $("<div/>").
@@ -285,39 +237,9 @@ object YoudaoView extends {
   initCSS()
 
   private def initEvent(): Unit = {
-    var mouseDown = false
-    var winX = 0.0
-    var winY = 0.0
-    var mouseX = 0.0
-    var mouseY = 0.0
-    titleBar.mousedown { e =>
-      titleBar.css("cursor", "move")
-      mouseDown = true
-      winX = win.css("left").stripSuffix("px").toDouble
-      winY = win.css("top").stripSuffix("px").toDouble
-      mouseX = e.pageX
-      mouseY = e.pageY
-    }
-
-    def mouseUp(e: JQueryEventObject): Unit = {
-      titleBar.css("cursor", "default")
-      mouseDown = false
-    }
-
-    titleBar.mouseup(mouseUp _)
-    titleBar.mouseleave(mouseUp _)
-
-    titleBar.mousemove { e =>
-      if (mouseDown) {
-        val offsetX = e.pageX - mouseX
-        val offsetY = e.pageY - mouseY
-        win.moveTo(winX + offsetX, winY + offsetY)
-      }
-    }
   }
 
   private def initCSS(): Unit = {
-    val backgroubndColor = "lightgray"
     val textColor = "rgb(40, 56, 70)"
     val phoneticColor = "rgb(30, 80, 150)"
     val phoneticHoverColor = "rgb(30, 100, 170)"
@@ -333,41 +255,6 @@ object YoudaoView extends {
       appendTo(document.body).
       html(
         s"""
-          |.${win.attr("class")} {
-          |  padding: 0;
-          |  background: $backgroubndColor;
-          |  display: none;
-          |  position: absolute;
-          |  border-radius: 5px;
-          |  border: 1px solid lightslategrey;
-          |  box-shadow: 0 3px 4px rgba(0, 0, 0, 0.2);
-          |  z-index: 99999;
-          |}
-          |
-          |.${titleBar.attr("class")} {
-          |  background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, darkgray), color-stop(1, gray));
-          |  background:-moz-linear-gradient(top, darkgray 5%, gray 100%);
-          |  background:-webkit-linear-gradient(top, darkgray 5%, gray 100%);
-          |  background:-o-linear-gradient(top, darkgray 5%, gray 100%);
-          |  background:-ms-linear-gradient(top, darkgray 5%, gray 100%);
-          |  background:linear-gradient(to bottom, darkgray 5%, gray 100%);
-          |  background-color: darkgray;
-          |  padding: 5px 0;
-          |  margin: 0;
-          |  height: 25px;
-          |  text-align: center;
-          |  cursor: default;
-          |}
-          |
-          |.${title.attr("class")} {
-          |  font-size: 15px;
-          |  font-weight: bold;
-          |  letter-spacing: 1px;
-          |  color: snow;
-          |  cursor: inherit;
-          |  margin: 0;
-          |}
-          |
           |.${content.attr("class")} {
           |  padding-top: 10px;
           |  padding-bottom: 5px;
@@ -387,7 +274,7 @@ object YoudaoView extends {
           |  width: 130px;
           |}
           |
-          |.youdao-search-button {
+          |${cssClass("search-button")} {
           |	 -moz-box-shadow: 0px 1px 3px 0px #91b8b3;
           |	 -webkit-box-shadow: 0px 1px 3px 0px #91b8b3;
           |	 box-shadow: 0px 1px 3px 0px #91b8b3;
@@ -414,7 +301,7 @@ object YoudaoView extends {
           |  text-decoration:none;
           |  text-shadow:0px -1px 0px #2b665e;
           |}
-          |.youdao-search-button:hover {
+          |${cssClass("search-button")}:hover {
           |	 background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #6c7c7c), color-stop(1, #768d87));
           |	 background:-moz-linear-gradient(top, #6c7c7c 5%, #768d87 100%);
           |	 background:-webkit-linear-gradient(top, #6c7c7c 5%, #768d87 100%);
@@ -424,7 +311,7 @@ object YoudaoView extends {
           |	 filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#6c7c7c', endColorstr='#768d87',GradientType=0);
           |	 background-color:#6c7c7c;
           |}
-          |.youdao-search-button:active {
+          |${cssClass("search-button")}:active {
           |  position:relative;
           |  top:1px;
           |}
@@ -497,19 +384,6 @@ object YoudaoView extends {
           |}
           |${cssClass("word")}:hover {
           |  text-decoration: underline;
-          |}
-          |
-          |.${win.attr("class")} hr {
-          |  clear: both;
-          |}
-          |
-          |.${win.attr("class")} hr:first-of-type {
-          |  margin-top: 3px;
-          |  margin-bottom: 0.7em;
-          |}
-          |
-          |.${win.attr("class")} hr:last-of-type {
-          |  margin-top: 0.7em;
           |}
           |
           |.${imageSearchLink.attr("class")} {
