@@ -8,11 +8,23 @@ import org.scalajs.jquery.{JQuery, JQueryEventObject, jQuery => $}
 /**
   * Created by cherub on 17-5-31.
   */
-class DictScene extends Scene {
+class DictScene(dict: Dictionary) extends Scene {
   // At search button clicked, send search line value to function, default do nothing
   var searchCallback: String => Unit = { _ => () }
 
-  def showQueryInWin(dict: Dictionary, queryResponse: QueryResponse): this.type = {
+  def showWord(word: String): Unit = {
+    before_query(dict, word)
+    startLoad()
+    dict.query(word) { qr =>
+      qr.foreach { queryRes =>
+        stopLoad()
+        showQueryInWin(queryRes)
+        parent.autoMove()
+      }
+    }
+  }
+
+  def showQueryInWin(queryResponse: QueryResponse): this.type = {
     val word = queryResponse.queryWord
 
     phoneticUK.html(
@@ -38,7 +50,7 @@ class DictScene extends Scene {
 
     // 点击翻译中的单词时直接查询
     $(cssClass("word")).click { (e: JQueryEventObject) =>
-      searchCallback($(e.currentTarget).text())
+      showWord($(e.currentTarget).text())
     }
     this
   }
@@ -150,7 +162,7 @@ class DictScene extends Scene {
       attr("type", "button").
       html("Search").
       click { (_: JQueryEventObject) =>
-        searchCallback(searchLine.value.toString.trim)
+        showWord(searchLine.value.toString.trim)
       }.
       appendTo(searchDiv)
 

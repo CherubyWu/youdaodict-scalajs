@@ -67,6 +67,7 @@ class Window extends View {
   }
 
   def replaceScene(scene: Scene): this.type = {
+    scene.parent = this
     clear().content.append(scene.content)
     this
   }

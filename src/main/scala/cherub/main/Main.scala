@@ -14,7 +14,7 @@ import scala.scalajs.js.JSApp
 object Main extends JSApp {
   val dict: Dictionary = YoudaoDict
   val win = new Window
-  val dictScene: DictScene = new DictScene
+  val dictScene: DictScene = new DictScene(dict)
   win.replaceScene(dictScene)
 
 
@@ -25,10 +25,6 @@ object Main extends JSApp {
   }
 
   def initEvent(): Unit = {
-    dictScene.searchCallback = { w =>
-      query(w)
-    }
-
     $("body").mouseup { e =>
       if (enable)
         translate(e.asInstanceOf[MouseEvent])
@@ -46,20 +42,6 @@ object Main extends JSApp {
     }
   }
 
-  def query(word: String): Unit = {
-    dictScene.
-      before_query(dict, word).
-      startLoad()
-    dict.query(word) { qr =>
-      qr.foreach { queryRes =>
-        dictScene.
-          stopLoad().
-          showQueryInWin(dict, queryRes)
-        win.autoMove()
-      }
-    }
-  }
-
   def translate(e: MouseEvent): Unit = {
     if (win.pointInWin(e.pageX, e.pageY))
       return
@@ -72,7 +54,7 @@ object Main extends JSApp {
           .replace("-\n", "")
           .replace("\n", " ")
         if (!word.isEmpty) {
-          win.showWinAt(e.pageX, e.pageY, () => query(word))
+          win.showWinAt(e.pageX, e.pageY, () => dictScene.showWord(word))
         }
       }
     }
